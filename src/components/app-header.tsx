@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 
 const routes = [
   {
-    label: "dashboard",
+    label: "Dashboard",
     pathname: "/app/dashboard",
   },
   {
-    label: "account",
+    label: "Account",
     pathname: "/app/account",
   },
 ];

@@ -4,6 +4,7 @@ import AppFooter from "@/src/components/app-footer";
 import AppHeader from "@/src/components/app-header";
 import BackgroundPattern from "@/src/components/backgroundpattern";
 import PetContextProvider from "@/src/context/pet-context";
+import SearchContextProvider from "@/src/context/search-context-provider";
 
 async function Layout({ children }: { children: React.ReactNode }) {
   const responce = await fetch(
@@ -18,7 +19,9 @@ async function Layout({ children }: { children: React.ReactNode }) {
       <BackgroundPattern />
       <div className=" flex flex-col max-w-[1020px] mx-auto px-4 min-h-screen">
         <AppHeader />
-        <PetContextProvider data={data}>{children}</PetContextProvider>
+        <SearchContextProvider>
+          <PetContextProvider data={data}>{children}</PetContextProvider>
+        </SearchContextProvider>
         <AppFooter />
       </div>
     </>
