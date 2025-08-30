@@ -2,9 +2,11 @@
 import { Usepetcontext } from "@/lib/hooks";
 import { Pet } from "@/lib/types";
 import Image from "next/image";
+import Petbutton from "./pet-button";
 
 function PetDetails() {
   const { currentpet } = Usepetcontext();
+
   return (
     <section className="flex flex-col w-full h-full">
       {!currentpet ? (
@@ -35,6 +37,7 @@ function EmptyView() {
 }
 
 function Topbar({ pet }: prop) {
+  const { handlecheckoutbutton } = Usepetcontext();
   return (
     <div className="flex items-center px-8 py-5 bg-white border-b border-light">
       <Image
@@ -45,6 +48,18 @@ function Topbar({ pet }: prop) {
         className="w-[75px] h-[75px] rounded-full object-cover "
       />
       <h3 className="font-semibold text-3xl leading-7 ml-5">{pet?.name}</h3>
+
+      <div className="ml-auto flex space-x-3">
+        <Petbutton actionType="edit">Edit</Petbutton>
+        <Petbutton
+          actionType="checkout"
+          onClick={() => {
+            handlecheckoutbutton(pet?.id);
+          }}
+        >
+          Checkout
+        </Petbutton>
+      </div>
     </div>
   );
 }
