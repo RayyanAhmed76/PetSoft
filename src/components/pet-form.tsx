@@ -12,7 +12,7 @@ type petformprops = {
   onFormSubmission: () => void;
 };
 function Petform({ actionType, onFormSubmission }: petformprops) {
-  const { addpethandler } = Usepetcontext();
+  const { addpethandler, currentpet, handlepetedit } = Usepetcontext();
   const handleSumbit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -26,7 +26,12 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
       age: +(formData.get("age") as string),
     };
 
-    addpethandler(pet);
+    if (actionType === "add") {
+      addpethandler(pet);
+    } else if (actionType === "edit") {
+      handlepetedit(currentpet!.id, pet);
+    }
+
     onFormSubmission();
   };
   return (
@@ -34,27 +39,52 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
       <div className="space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
-          <Input id="name" name="name" type="text"></Input>
+          <Input
+            id="name"
+            name="name"
+            type="text"
+            defaultValue={actionType === "edit" ? currentpet?.name : " "}
+          ></Input>
         </div>
 
         <div className="space-y-1">
           <Label htmlFor="ownername">Owner Name</Label>
-          <Input id="ownername" name="ownername" type="text"></Input>
+          <Input
+            id="ownername"
+            name="ownerName"
+            type="text"
+            defaultValue={actionType === "edit" ? currentpet?.ownerName : " "}
+          ></Input>
         </div>
 
         <div className="space-y-1">
           <Label htmlFor="imageurl">Image Url</Label>
-          <Input id="imageirl" name="imageurl" type="text"></Input>
+          <Input
+            id="imageirl"
+            name="imageUrl"
+            type="text"
+            defaultValue={actionType === "edit" ? currentpet?.imageUrl : " "}
+          ></Input>
         </div>
 
         <div className="space-y-1">
           <Label htmlFor="age">Age</Label>
-          <Input id="age" name="age" type="number"></Input>
+          <Input
+            id="age"
+            name="age"
+            type="number"
+            defaultValue={actionType === "edit" ? currentpet?.age : " "}
+          ></Input>
         </div>
 
         <div className="space-y-1">
           <Label htmlFor="notes">Notes</Label>
-          <Textarea id="notes" name="notes" rows={3}></Textarea>
+          <Textarea
+            id="notes"
+            name="notes"
+            defaultValue={actionType === "edit" ? currentpet?.notes : " "}
+            rows={3}
+          ></Textarea>
         </div>
       </div>
       <Button variant={"default"} className="mt-5 self-end">

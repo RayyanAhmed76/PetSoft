@@ -15,6 +15,7 @@ type Tpetcontext = {
   noofpets: number;
   handlecheckoutbutton: (id: string) => void;
   addpethandler: (newPet: Omit<Pet, "id">) => void;
+  handlepetedit: (petid: string, newpetdata: Omit<Pet, "id">) => void;
 };
 
 export const Petcontext = createContext<Tpetcontext | null>(null);
@@ -39,6 +40,12 @@ export default function PetContextProvider({
     ]);
   };
 
+  const handlepetedit = (petid: string, newpetdata: Omit<Pet, "id">) => {
+    setpets((prev) =>
+      prev.map((pet) => (pet.id === petid ? { id: petid, ...newpetdata } : pet))
+    );
+  };
+
   const handlecheckoutbutton = (id: string) => {
     setpets((prev) => prev.filter((pet) => pet.id !== id));
     setpetid(null);
@@ -58,6 +65,7 @@ export default function PetContextProvider({
         noofpets,
         handlecheckoutbutton,
         addpethandler,
+        handlepetedit,
       }}
     >
       {children}
