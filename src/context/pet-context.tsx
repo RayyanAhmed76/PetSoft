@@ -21,10 +21,9 @@ type Tpetcontext = {
 
 export const Petcontext = createContext<Tpetcontext | null>(null);
 export default function PetContextProvider({
-  data,
+  data: pets,
   children,
 }: petcontextprovideprops) {
-  const [pets, setpets] = useState(data);
   const [petid, setpetid] = useState<string | null>(null);
 
   const noofpets = pets.length;

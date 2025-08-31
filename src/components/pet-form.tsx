@@ -7,6 +7,8 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Usepetcontext } from "@/lib/hooks";
 import { addPet } from "../actions/action";
+import PetBtn from "./pet-form-btn";
+import { toast } from "sonner";
 
 type petformprops = {
   actionType: "add" | "edit";
@@ -16,7 +18,17 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
   const { currentpet } = Usepetcontext();
 
   return (
-    <form action={addPet} className="flex flex-col">
+    <form
+      action={async (formData) => {
+        const error = await addPet(formData);
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+        onFormSubmission();
+      }}
+      className="flex flex-col"
+    >
       <div className="space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
@@ -70,10 +82,7 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
           ></Textarea>
         </div>
       </div>
-      <Button variant={"default"} className="mt-5 self-end">
-        {" "}
-        {actionType === "add" ? "Add a new Pet" : "Save changes"}
-      </Button>
+      <PetBtn actionType={actionType} />
     </form>
   );
 }
