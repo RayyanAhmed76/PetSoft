@@ -6,36 +6,17 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Usepetcontext } from "@/lib/hooks";
+import { addPet } from "../actions/action";
 
 type petformprops = {
   actionType: "add" | "edit";
   onFormSubmission: () => void;
 };
 function Petform({ actionType, onFormSubmission }: petformprops) {
-  const { addpethandler, currentpet, handlepetedit } = Usepetcontext();
-  const handleSumbit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const pet = {
-      name: formData.get("name") as string,
-      ownerName: formData.get("ownerName") as string,
-      imageUrl:
-        (formData.get("imageUrl") as string) ||
-        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-      notes: formData.get("notes") as string,
-      age: +(formData.get("age") as string),
-    };
+  const { currentpet } = Usepetcontext();
 
-    if (actionType === "add") {
-      addpethandler(pet);
-    } else if (actionType === "edit") {
-      handlepetedit(currentpet!.id, pet);
-    }
-
-    onFormSubmission();
-  };
   return (
-    <form onSubmit={handleSumbit} className="flex flex-col">
+    <form action={addPet} className="flex flex-col">
       <div className="space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
@@ -58,12 +39,14 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
         </div>
 
         <div className="space-y-1">
-          <Label htmlFor="imageurl">Image Url</Label>
+          <Label htmlFor="imageUrl">Image Url</Label>
           <Input
-            id="imageirl"
+            id="imageUrl"
             name="imageUrl"
             type="text"
-            defaultValue={actionType === "edit" ? currentpet?.imageUrl : " "}
+            defaultValue={
+              actionType === "edit" ? currentpet?.imageUrl ?? "" : ""
+            }
           ></Input>
         </div>
 

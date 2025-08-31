@@ -24,11 +24,11 @@ function PetList() {
             )}
           >
             <Image
+              className="w-[45px] h-[45px] rounded-full object-cover"
               src={pet.imageUrl}
-              alt="pet picture"
+              alt={pet.name}
               width={45}
               height={45}
-              className="w-[45px] h-[45px] rounded-full object-cover"
             />
             <p className="font-semibold">{pet.name}</p>
           </button>

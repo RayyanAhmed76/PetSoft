@@ -23,7 +23,7 @@ export default async function Page() {
           <ContentBlock>
             <PetList />
             <div className="absolute right-4 bottom-4">
-              <Petbutton actionType="add" />
+              <Petbutton actionType="add"  />
             </div>
           </ContentBlock>
         </div>

@@ -2,6 +2,7 @@
 
 import { Pet } from "@/lib/types";
 import { createContext, useState } from "react";
+import { addPet } from "../actions/action";
 type petcontextprovideprops = {
   data: Pet[];
   children: React.ReactNode;
@@ -31,13 +32,15 @@ export default function PetContextProvider({
   const currentpet = pets.find((pet) => pet.id === petid);
 
   const addpethandler = (newPet: Omit<Pet, "id">) => {
-    setpets((prev) => [
-      ...prev,
-      {
-        ...newPet,
-        id: Date.now().toString(),
-      },
-    ]);
+    // setpets((prev) => [
+    //   ...prev,
+    //   {
+    //     ...newPet,
+    //     id: Date.now().toString(),
+    //   },
+    // ]);
+
+    addPet(newPet);
   };
 
   const handlepetedit = (petid: string, newpetdata: Omit<Pet, "id">) => {
