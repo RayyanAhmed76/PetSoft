@@ -6,6 +6,7 @@ import { PlusIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
 import { DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
 import Petform from "./pet-form";
+import { flushSync } from "react-dom";
 
 type Petbuttonprops = {
   actionType: "edit" | "checkout" | "add";
@@ -49,7 +50,9 @@ function Petbutton({
           <Petform
             actionType={actionType}
             onFormSubmission={() => {
-              setisformopen(false);
+              flushSync(() => {
+                setisformopen(false);
+              });
             }}
           />
         </DialogContent>

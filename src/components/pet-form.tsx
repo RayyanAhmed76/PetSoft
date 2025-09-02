@@ -15,27 +15,27 @@ type petformprops = {
   onFormSubmission: () => void;
 };
 function Petform({ actionType, onFormSubmission }: petformprops) {
-  const { currentpet } = Usepetcontext();
+  const { currentpet, addpethandler, handlepetedit } = Usepetcontext();
 
   return (
     <form
       action={async (formData) => {
-        if (actionType === "add") {
-          const error = await addPet(formData);
-          if (error) {
-            toast.error(error.message);
-            return;
-          }
-          toast.success("pet added successfully!");
-        } else if (actionType === "edit") {
-          const error = await editPet(currentpet?.id, formData);
-          if (error) {
-            toast.error(error.message);
-            return;
-          }
-          toast.success("pet updated successfully!");
-        }
         onFormSubmission();
+        const petdata = {
+          name: formData.get("name") as string,
+          ownerName: formData.get("ownerName") as string,
+          imageUrl:
+            (formData.get("imageUrl") as string) ||
+            "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+          age: Number(formData.get("age")),
+          notes: formData.get("notes") as string,
+        };
+
+        if (actionType === "add") {
+          addpethandler(petdata);
+        } else if (actionType === "edit") {
+          handlepetedit(currentpet!.id, petdata);
+        }
       }}
       className="flex flex-col"
     >

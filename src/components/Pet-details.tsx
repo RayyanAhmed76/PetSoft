@@ -40,6 +40,7 @@ function EmptyView() {
 
 function Topbar({ pet }: prop) {
   const [ispending, starttransition] = useTransition();
+  const { handlecheckoutbutton } = Usepetcontext();
   return (
     <div className="flex items-center px-8 py-5 bg-white border-b border-light">
       <Image
@@ -58,7 +59,7 @@ function Topbar({ pet }: prop) {
           actionType="checkout"
           onClick={async () => {
             starttransition(async () => {
-              await deletePet(pet?.id);
+              await handlecheckoutbutton(pet.id);
             });
           }}
         >
