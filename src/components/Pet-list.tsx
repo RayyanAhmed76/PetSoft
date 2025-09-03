@@ -1,11 +1,11 @@
 "use client";
-import { Usepetcontext, usesearchcontext } from "@/lib/hooks";
+import { Usepetcontext, Usesearchcontext } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 function PetList() {
   const { pets, petid, handlechangeselectedpetid } = Usepetcontext();
-  const { searchquery } = usesearchcontext();
+  const { searchquery } = Usesearchcontext();
 
   const filteredpets = pets.filter((pet) =>
     pet.name.toLowerCase().includes(searchquery)

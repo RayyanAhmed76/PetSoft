@@ -1,8 +1,8 @@
 "use client";
-import { usesearchcontext } from "@/lib/hooks";
+import { Usesearchcontext } from "@/lib/hooks";
 
 function SearchForm() {
-  const { searchquery, handlechangesearchquery } = usesearchcontext();
+  const { searchquery, handlechangesearchquery } = Usesearchcontext();
   return (
     <form className="w-full h-full">
       <input

@@ -11,7 +11,7 @@ export function Usepetcontext() {
   return context;
 }
 
-export function usesearchcontext() {
+export function Usesearchcontext() {
   const context = useContext(Searchcontext);
   if (!context) {
     throw new Error("context not avaliable");

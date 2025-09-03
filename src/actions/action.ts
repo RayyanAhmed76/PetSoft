@@ -1,32 +1,51 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { PetEssentials } from "@/lib/types";
 import { sleep } from "@/lib/utils";
+import { petformvalidation, petIdSchema } from "@/lib/validation";
+import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { toast } from "sonner";
 
-export async function addPet(petdata) {
-  await sleep(2000);
+export async function addPet(petdata: unknown) {
+  await sleep(1000);
+  const validatedPet = petformvalidation.safeParse(petdata);
+  if (!validatedPet.success) {
+    return {
+      message: "Invalid pet data",
+    };
+  }
+
   try {
     await prisma.pet.create({
-      data: petdata,
+      data: validatedPet.data,
     });
   } catch (error) {
+    console.log(error);
     return {
-      message: "age parameter is wrong!",
+      message: "Pe cannot be added!",
     };
   }
   revalidatePath("/app", "layout");
 }
 
-export async function editPet(petid, newpetdata) {
-  await sleep(2000);
+export async function editPet(petid: unknown, newpetdata: unknown) {
+  await sleep(1000);
+
+  const validatepetId = petIdSchema.safeParse(petid);
+  const validatedPet = petformvalidation.safeParse(newpetdata);
+  if (!validatepetId.success || !validatedPet.success) {
+    return {
+      message: "Invalid pet data",
+    };
+  }
+
   try {
     await prisma.pet.update({
       where: {
-        id: petid,
+        id: validatepetId.data,
       },
-      data: newpetdata,
+      data: validatedPet.data,
     });
   } catch (error) {
     return {
@@ -36,12 +55,19 @@ export async function editPet(petid, newpetdata) {
   revalidatePath("/app", "layout");
 }
 
-export async function deletePet(petid) {
-  await sleep(2000);
+export async function deletePet(petid: unknown) {
+  await sleep(1000);
+
+  const validatepetId = petIdSchema.safeParse(petid);
+  if (!validatepetId.success) {
+    return {
+      message: "Invalid pet data",
+    };
+  }
   try {
     await prisma.pet.delete({
       where: {
-        id: petid,
+        id: validatepetId.data,
       },
     });
   } catch (error) {
