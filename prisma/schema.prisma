@@ -12,7 +12,7 @@ datasource db {
 
 model User{
   id String @id @default(cuid())
-  Email String @unique
+  email String @unique
   Hashpassword String
   pets    Pet[]
   createdAt DateTime @default(now())

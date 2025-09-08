@@ -24,19 +24,22 @@ function Petform({ actionType, onFormSubmission }: petformprops) {
     trigger,
     formState: { isSubmitting, errors },
   } = useForm<TpetForm>({
-    resolver: zodResolver(petformvalidation),
-    defaultValues: {
-      name: currentpet?.name,
-      ownerName: currentpet?.ownerName,
-      imageUrl: currentpet?.imageUrl,
-      age: currentpet?.age,
-      notes: currentpet?.notes,
-    },
+    resolver: zodResolver(petformvalidation) as any,
+    defaultValues:
+      actionType === "edit"
+        ? {
+            name: currentpet?.name,
+            ownerName: currentpet?.ownerName,
+            imageUrl: currentpet?.imageUrl,
+            age: currentpet?.age,
+            notes: currentpet?.notes,
+          }
+        : undefined,
   });
 
   return (
     <form
-      action={async (formData) => {
+      action={async () => {
         const result = await trigger();
         if (!result) return;
         onFormSubmission();

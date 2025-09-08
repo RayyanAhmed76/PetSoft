@@ -9,8 +9,8 @@ function Page() {
       <div>
         <H1 className="text-center">Log In</H1>
       </div>
-      <AuthForm />
-      <Button className="mt-3">Log In</Button>
+      <AuthForm type="login" />
+
       <p className="text-zinc-600 mt-4 text-md font-semibold">
         Not have an account yet?
         <Link className="text-zinc-500 mt-6 text-sm" href={"/signup"}>

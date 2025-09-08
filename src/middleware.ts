@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
-export function middleware(request: Request) {
-  console.log(request.url);
+export default auth;
 
-  return NextResponse.next();
-}
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};

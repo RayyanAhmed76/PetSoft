@@ -5,9 +5,17 @@ import PetContextProvider from "@/src/context/pet-context";
 import SearchContextProvider from "@/src/context/search-context-provider";
 import prisma from "@/lib/db";
 import { Toaster } from "@/components/ui/sonner";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { checkauth } from "@/lib/server-utils";
 
 async function Layout({ children }: { children: React.ReactNode }) {
-  const pets = await prisma.pet.findMany();
+  const session = await checkauth();
+  const pets = await prisma.pet.findMany({
+    where: {
+      userid: session.user.id,
+    },
+  });
 
   return (
     <>

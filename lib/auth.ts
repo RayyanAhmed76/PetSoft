@@ -1,0 +1,68 @@
+import NextAuth, { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import prisma from "./db";
+import bcrypt from "bcryptjs";
+
+const config = {
+  pages: {
+    signIn: "/login",
+  },
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const { email, password } = credentials;
+
+        const user = await prisma?.user.findUnique({
+          where: {
+            email,
+          },
+        });
+        if (!user) {
+          console.log("user not found!");
+          return null;
+        }
+
+        const passwordmatch = await bcrypt.compare(password, user.Hashpassword);
+
+        if (!passwordmatch) {
+          console.log("Invalid");
+          return null;
+        }
+
+        return user;
+      },
+    }),
+  ],
+  callbacks: {
+    authorized: ({ auth, request }) => {
+      const isloggedIn = Boolean(auth?.user);
+      const tryingtoaccessapp = request.nextUrl.pathname.includes("/app");
+      if (isloggedIn && tryingtoaccessapp) {
+        return true;
+      }
+      if (!isloggedIn && tryingtoaccessapp) {
+        return false;
+      }
+      if (isloggedIn && !tryingtoaccessapp) {
+        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
+      }
+      if (!isloggedIn && !tryingtoaccessapp) {
+        return true;
+      }
+      return false;
+    },
+    jwt: ({ token, user }) => {
+      if (user && user.id) {
+        token.userid = user.id;
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      session.user.id = token.userid;
+
+      return session;
+    },
+  },
+} satisfies NextAuthConfig;
+
+export const { auth, signIn, signOut } = NextAuth(config);

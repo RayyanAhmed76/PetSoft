@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 const userData: Prisma.UserCreateInput = {
-  Email: "example@gmail.com",
+  email: "example@gmail.com",
   Hashpassword: "",
   pets: {
     create: [
