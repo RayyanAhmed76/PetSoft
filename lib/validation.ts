@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { email } from "zod";
 import { defautPetImage } from "./constant-image-pet";
 
 export const petIdSchema = z.string().cuid();
@@ -36,3 +36,8 @@ export const petformvalidation = z
   }));
 
 export type TpetForm = z.infer<typeof petformvalidation>;
+
+export const authformschema = z.object({
+  email: z.string().email().max(100),
+  password: z.string().max(100).min(5),
+});
