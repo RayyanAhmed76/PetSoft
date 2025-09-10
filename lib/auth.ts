@@ -39,14 +39,26 @@ const config = {
     authorized: ({ auth, request }) => {
       const isloggedIn = Boolean(auth?.user);
       const tryingtoaccessapp = request.nextUrl.pathname.includes("/app");
-      if (isloggedIn && tryingtoaccessapp) {
+
+      if (isloggedIn && tryingtoaccessapp && !auth?.user.hasAccess) {
+        return Response.redirect(new URL("/payment", request.nextUrl));
+      }
+
+      if (isloggedIn && tryingtoaccessapp && auth?.user.hasAccess) {
         return true;
       }
       if (!isloggedIn && tryingtoaccessapp) {
         return false;
       }
       if (isloggedIn && !tryingtoaccessapp) {
-        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          (request.nextUrl.pathname.includes("/signup") &&
+            !auth?.user.hasAccess)
+        ) {
+          return Response.redirect(new URL("/payment", request.nextUrl));
+        }
+        return true;
       }
       if (!isloggedIn && !tryingtoaccessapp) {
         return true;
@@ -56,11 +68,13 @@ const config = {
     jwt: ({ token, user }) => {
       if (user && user.id) {
         token.userid = user.id;
+        token.hasAccess = user.hasAccess;
       }
       return token;
     },
     session: ({ session, token }) => {
       session.user.id = token.userid;
+      session.user.hasAccess = token.hasAccess;
 
       return session;
     },
