@@ -11,9 +11,10 @@ export default function Home() {
         alt="petsoft logo"
         width={519}
         height={472}
+        className="mx-auto xl:mx-0"
       />
-      <div>
-        <Logo />
+      <div className="text-center xl:text-left">
+        <Logo className="mx-auto xl:mx-0" />
         <h1 className="text-5xl font-semibold my-6 max-w-[500px]">
           Manage your <span className="font-extrabold">pet daycare</span> with
           ease
@@ -22,7 +23,7 @@ export default function Home() {
           use PetSoft to easily keep track of pets under your care.Get life time
           access for $299.
         </p>
-        <div className="space-x-3 mt-10">
+        <div className="space-x-3 mt-10 mb-5">
           <Button asChild>
             <Link href="/signup">Get started</Link>
           </Button>
