@@ -1,40 +1,11 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import prisma from "./db";
-import bcrypt from "bcryptjs";
+import { NextAuthConfig } from "next-auth";
 import { getuserbyid } from "./server-utils";
-import { authformschema } from "./validation";
+import prisma from "./db";
 
-const config = {
+export const NextAuthEdgeConfig = {
   pages: {
     signIn: "/login",
   },
-  providers: [
-    Credentials({
-      async authorize(credentials) {
-        const validatedauthdata = authformschema.safeParse(credentials);
-        if (!validatedauthdata.success) {
-          return null;
-        }
-        const { email, password } = validatedauthdata.data;
-
-        const user = await getuserbyid(email);
-        if (!user) {
-          console.log("user not found!");
-          return null;
-        }
-
-        const passwordmatch = await bcrypt.compare(password, user.Hashpassword);
-
-        if (!passwordmatch) {
-          console.log("Invalid");
-          return null;
-        }
-
-        return user;
-      },
-    }),
-  ],
   callbacks: {
     authorized: ({ auth, request }) => {
       const isloggedIn = Boolean(auth?.user);
@@ -80,7 +51,11 @@ const config = {
       }
 
       if (trigger === "update") {
-        const userfromdb = await getuserbyid(token.email);
+        const userfromdb = await prisma.user.findUnique({
+          where: {
+            email: token.email,
+          },
+        });
         if (userfromdb) {
           token.hasAccess = userfromdb?.hasAccess;
         }
@@ -94,11 +69,5 @@ const config = {
       return session;
     },
   },
+  providers: [],
 } satisfies NextAuthConfig;
-
-export const {
-  auth,
-  signIn,
-  signOut,
-  handlers: { GET, POST },
-} = NextAuth(config);

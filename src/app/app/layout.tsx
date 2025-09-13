@@ -5,7 +5,7 @@ import PetContextProvider from "@/src/context/pet-context";
 import SearchContextProvider from "@/src/context/search-context-provider";
 import prisma from "@/lib/db";
 import { Toaster } from "@/components/ui/sonner";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth-no-edge";
 import { redirect } from "next/navigation";
 import { checkauth, getpetbyuserid } from "@/lib/server-utils";
 

@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth-no-edge";
 import { checkauth } from "@/lib/server-utils";
 import ContentBlock from "@/src/components/content-block";
 import H1 from "@/src/components/h1";
