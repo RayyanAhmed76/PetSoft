@@ -94,7 +94,7 @@ export async function signUp(prevState: unknown, formdata: unknown) {
 // pet
 export async function addPet(petdata: unknown) {
   const session = await checkauth();
-  await sleep(1000);
+
   const validatedPet = petformvalidation.safeParse(petdata);
   if (!validatedPet.success) {
     return {
@@ -124,7 +124,6 @@ export async function addPet(petdata: unknown) {
 
 export async function editPet(petid: unknown, newpetdata: unknown) {
   const session = await checkauth();
-  await sleep(1000);
 
   const validatepetId = petIdSchema.safeParse(petid);
   const validatedPet = petformvalidation.safeParse(newpetdata);
@@ -164,7 +163,6 @@ export async function editPet(petid: unknown, newpetdata: unknown) {
 
 export async function deletePet(petid: unknown) {
   const session = await checkauth();
-  await sleep(1000);
 
   const validatepetId = petIdSchema.safeParse(petid);
   if (!validatepetId.success) {
